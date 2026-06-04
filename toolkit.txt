@@ -1,0 +1,629 @@
+1:import React, { useState } from 'react';
+2:import { Copy, Check } from 'lucide-react';
+3:import { Section, Heading, Text, Button, Card, Grid } from '../components/Blocks';
+4:import { FadeIn } from '../components/FadeIn';
+5:
+6:
+7:const BioCard = ({ title, text, boldText }: { title: string; text: string; boldText: string }) => {
+8:    const [copied, setCopied] = useState(false);
+9:
+10:    const handleCopy = () => {
+11:        navigator.clipboard.writeText(text);
+12:        setCopied(true);
+13:        setTimeout(() => setCopied(false), 2000);
+14:    };
+15:
+16:    const highlightVariables = (content: string) => {
+17:        const parts = content.split(/(\[[^\]]+\])/g);
+18:        return parts.map((part, index) => {
+19:            if (part.startsWith('[') && part.endsWith(']')) {
+20:                return <span key={index} className="text-brand-deep-teal bg-brand-soft-teal/30 px-1.5 py-0.5 rounded font-medium border border-brand-deep-teal/20 mx-0.5">{part}</span>;
+21:            }
+22:            if (part === boldText) {
+23:                return <strong key={index} className="text-brand-structural-navy font-bold">{part}</strong>;
+24:            }
+25:            return <span key={index}>{part}</span>;
+26:        });
+27:    };
+28:
+29:    // To handle bold, we replace boldText with exact match
+30:    const withBold = text.split(boldText);
+31:    const renderContent = () => {
+32:        if (withBold.length === 2) {
+33:             return <>{highlightVariables(withBold[0])}<strong className="text-brand-structural-navy font-bold">{boldText}</strong>{highlightVariables(withBold[1])}</>;
+34:        }
+35:        return highlightVariables(text);
+36:    };
+37:
+38:    return (
+39:        <Card className="bg-brand-soft-neutral/10 border-brand-soft-neutral p-6 rounded-2xl flex flex-col gap-4">
+40:            <div className="flex items-center justify-between">
+41:                <Heading level={4} className="text-md text-brand-structural-navy m-0">{title}</Heading>
+42:                <button 
+43:                    onClick={handleCopy}
+44:                    className="flex items-center gap-1.5 text-xs font-semibold text-brand-deep-teal bg-white border border-brand-deep-teal/30 px-3 py-1.5 rounded-full hover:bg-brand-soft-teal/30 transition-colors shadow-sm"
+45:                >
+46:                    {copied ? <Check size={14} /> : <Copy size={14} />}
+47:                    {copied ? 'Copied!' : 'Copy text'}
+48:                </button>
+49:            </div>
+50:            <div className="bg-white p-5 rounded-xl border border-brand-soft-neutral/50 text-sm text-brand-secondary-text leading-relaxed shadow-inner">
+51:                {renderContent()}
+52:            </div>
+53:        </Card>
+54:    );
+55:};
+56:
+57:export const PractitionerToolkit = () => {
+58:    return (
+59:        <div className="pt-24 font-body border-t border-brand-soft-neutral/30">
+60:            {/* HERO SECTION */}
+61:            <Section theme="white" className="pt-16 pb-24 md:pt-24 md:pb-32">
+62:                <div className="max-w-4xl mx-auto text-center px-6">
+63:                    <FadeIn>
+64:                        <Heading level={1} className="mb-6 text-4xl md:text-5xl font-accent text-brand-deep-teal">
+65:                            Practitioner Toolkit & Media Hub
+66:                        </Heading>
+67:                        <Text size="xl" muted className="mb-10 max-w-2xl mx-auto">
+68:                            A comprehensive resource hub designed to enrich your practice, enhance your platform, 
+69:                            and help you communicate your expertise seamlessly to clients and peers.
+70:                        </Text>
+71:                        <div className="flex justify-center gap-4">
+72:                            <Button href="#categories" variant="primary">Explore Assets</Button>
+73:                        </div>
+74:                    </FadeIn>
+75:                </div>
+76:            </Section>
+77:
+78:            {/* AUDIENCE PATHS */}
+79:            <Section theme="neutral" className="border-t border-brand-soft-neutral/30 pb-24">
+80:                <div className="max-w-7xl mx-auto px-6">
+81:                    <Grid cols={2} className="gap-8">
+82:                        <FadeIn delay={0.1}>
+83:                            <Card className="h-full flex flex-col p-8 border-t-4 border-t-brand-soft-teal hover:shadow-md transition-all bg-white border border-brand-soft-neutral shadow-sm">
+84:                                <div className="mb-6 text-brand-deep-teal bg-brand-soft-teal/10 w-16 h-16 rounded-full flex items-center justify-center">
+85:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+86:                                </div>
+87:                                <Heading level={3} className="text-xl mb-4 font-heading text-brand-structural-navy">For ICHARS Practitioners</Heading>
+88:                                <Text muted className="mb-6 flex-grow">
+89:                                    Complement your training with clinical articles, theoretical frameworks, and 
+90:                                    methodologies tailored to reinforce session concepts and communicate your 
+91:                                    ICHARS qualifications effectively.
+92:                                </Text>
+93:                                <div>
+94:                                    <Button variant="outline" href="#categories" className="w-full">Explore Practitioner Assets</Button>
+95:                                </div>
+96:                            </Card>
+97:                        </FadeIn>
+98:
+99:                        <FadeIn delay={0.2}>
+100:                            <Card className="h-full flex flex-col p-8 border-t-4 border-t-brand-primary-text hover:shadow-md transition-all bg-white border border-brand-soft-neutral shadow-sm">
+101:                                <div className="mb-6 text-brand-structural-navy bg-brand-soft-neutral w-16 h-16 rounded-full flex items-center justify-center">
+102:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+103:                                </div>
+104:                                <Heading level={3} className="text-xl mb-4 font-heading text-brand-structural-navy">For Wellness Partners</Heading>
+105:                                <Text muted className="mb-6 flex-grow">
+106:                                    Elevate your content strategy with authoritative references, clinical insights, 
+107:                                    and engaging multimedia resources to construct well-informed wellness narratives.
+108:                                </Text>
+109:                                <div>
+110:                                    <Button variant="outline" href="#categories" className="w-full">Access Media & Content</Button>
+111:                                </div>
+112:                            </Card>
+113:                        </FadeIn>
+114:                    </Grid>
+115:                </div>
+116:            </Section>
+117:
+118:            {/* RESOURCE CATEGORIES */}
+119:            <Section theme="white" id="categories" className="border-t border-brand-soft-neutral/30 pb-24">
+120:                <div className="max-w-7xl mx-auto px-6">
+121:                    <div className="text-center mb-16">
+122:                        <Heading level={2} className="mb-4">Asset Categories</Heading>
+123:                        <Text size="lg" muted className="max-w-3xl mx-auto">
+124:                            Curated tools designed to visually represent your expertise and deepen your clients' understanding.
+125:                        </Text>
+126:                    </div>
+127:
+128:                    <Grid cols={3} className="gap-8">
+129:                        <FadeIn delay={0.1}>
+130:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 p-8 rounded-2xl border border-brand-soft-neutral/50">
+131:                                <div className="w-fit bg-white p-4 rounded-xl text-brand-deep-teal mb-6 shadow-sm border border-brand-soft-neutral">
+132:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 10 2 2 4-4"/></svg>
+133:                                </div>
+134:                                <Heading level={4} className="mb-3 font-heading text-lg text-brand-structural-navy">Badges & Credentials</Heading>
+135:                                <Text muted className="mb-6">
+136:                                    Official ICHARS credentials to host on your practice website, validating your training 
+137:                                    in Cognitive Hypnotic Psychotherapy and Coaching.
+138:                                </Text>
+139:                                <a href="#credentials" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-structural-navy hover:text-brand-soft-teal transition-colors mt-auto">
+140:                                    View Digital Badges <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+141:                                </a>
+142:                            </Card>
+143:                        </FadeIn>
+144:
+145:                        <FadeIn delay={0.2}>
+146:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 p-8 rounded-2xl border border-brand-soft-neutral/50">
+147:                                <div className="w-fit bg-white p-4 rounded-xl text-brand-deep-teal mb-6 shadow-sm border border-brand-soft-neutral">
+148:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="16" y2="16"/><line x1="8" y1="8" x2="8.01" y2="8"/></svg>
+149:                                </div>
+150:                                <Heading level={4} className="mb-3 font-heading text-lg text-brand-structural-navy">Core Framework Articles</Heading>
+151:                                <Text muted className="mb-6">
+152:                                    Peer-reviewed articles, explanatory frameworks, and the conceptual philosophies of 
+153:                                    ICHARS that you can link to for psychoeducation.
+154:                                </Text>
+155:                                <a href="#articles" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-structural-navy hover:text-brand-soft-teal transition-colors mt-auto">
+156:                                    Explore Articles <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+157:                                </a>
+158:                            </Card>
+159:                        </FadeIn>
+160:
+161:                        <FadeIn delay={0.3}>
+162:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 p-8 rounded-2xl border border-brand-soft-neutral/50">
+163:                                <div className="w-fit bg-white p-4 rounded-xl text-brand-deep-teal mb-6 shadow-sm border border-brand-soft-neutral">
+164:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+165:                                </div>
+166:                                <Heading level={4} className="mb-3 font-heading text-lg text-brand-structural-navy">Brand & Press Materials</Heading>
+167:                                <Text muted className="mb-6">
+168:                                    Official logos, high-resolution media materials, and brand guidelines for 
+169:                                    interviews, features, or affiliated marketing.
+170:                                </Text>
+171:                                <a href="#media-assets" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-structural-navy hover:text-brand-soft-teal transition-colors mt-auto">
+172:                                    Access Press Kit <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+173:                                </a>
+174:                            </Card>
+175:                        </FadeIn>
+176:                    </Grid>
+177:                </div>
+178:            </Section>
+179:
+180:            {/* IN-DEPTH ARTICLES & RESEARCH PAPERS */}
+181:            <Section theme="neutral" id="articles" className="border-t border-brand-soft-neutral/30 pb-24">
+182:                <div className="max-w-5xl mx-auto px-6">
+183:                    <div className="text-center mb-12">
+184:                        <Heading level={2} className="mb-4 text-brand-structural-navy">In-depth Articles and Research Papers</Heading>
+185:                        <Text size="lg" muted>
+186:                            Core concepts, peer-reviewed papers, and masterclasses available for reference on your platform.
+187:                        </Text>
+188:                    </div>
+189:
+190:                    <div className="bg-white rounded-2xl border border-brand-soft-neutral shadow-sm overflow-hidden mb-8">
+191:                        <div className="overflow-x-auto w-full max-w-full">
+192:                            <table className="w-full min-w-[700px] text-left border-collapse">
+193:                                <thead>
+194:                                    <tr className="bg-brand-soft-neutral/30 text-brand-structural-navy font-heading text-sm uppercase tracking-wider border-b border-brand-soft-neutral">
+195:                                        <th className="px-6 py-4 font-semibold">Keyword / Topic</th>
+196:                                        <th className="px-6 py-4 font-semibold">Title / Description</th>
+197:                                        <th className="px-6 py-4 font-semibold text-right">Linkable Asset / Embed Code</th>
+198:                                    </tr>
+199:                                </thead>
+200:                                <tbody className="text-sm text-brand-secondary-text">
+201:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+202:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">What is Cognitive Hypnotic Coaching®?</td>
+203:                                        <td className="px-6 py-4 w-1/3">Explore the most powerful and advance coaching approach</td>
+204:                                        <td className="px-6 py-4 text-right">
+205:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/psychotherapy-coaching/what-is-cognitive-hypnotic-coaching/'>What is Cognitive Hypnotic Coaching®?</a>">
+206:                                                &lt;a href="https://instituteofclinicalhypnosis.com/psychotherapy-coaching/what-is-cognitive-hypnotic-coaching/"&gt;What is Cognitive Hypnotic Coaching®?&lt;/a&gt;
+207:                                            </code>
+208:                                        </td>
+209:                                    </tr>
+210:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+211:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">What is Cognitive Hypnotic Psychotherapy®?</td>
+212:                                        <td className="px-6 py-4 w-1/3">Comprehensive Approach Unifies All Major Psychotherapy Methods</td>
+213:                                        <td className="px-6 py-4 text-right">
+214:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/psychotherapy-coaching/unifying-approach-to-psychotherapy/'>What is Cognitive Hypnotic Psychotherapy®?</a>">
+215:                                                &lt;a href="https://instituteofclinicalhypnosis.com/psychotherapy-coaching/unifying-approach-to-psychotherapy/"&gt;What is Cognitive Hypnotic Psychotherapy®?&lt;/a&gt;
+216:                                            </code>
+217:                                        </td>
+218:                                    </tr>
+219:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+220:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Hypnosis</td>
+221:                                        <td className="px-6 py-4 w-1/3">Exploring Hypnosis: Trance States, Pain Relief, Hallucinations</td>
+222:                                        <td className="px-6 py-4 text-right">
+223:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/hypnosis/what-is-hypnosis/'>Hypnosis</a>">
+224:                                                &lt;a href="https://instituteofclinicalhypnosis.com/hypnosis/what-is-hypnosis/"&gt;Hypnosis&lt;/a&gt;
+225:                                            </code>
+226:                                        </td>
+227:                                    </tr>
+228:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+229:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Neuro Linguistic Programming</td>
+230:                                        <td className="px-6 py-4 w-1/3">Insightful Podcast: Explore Neuro-Linguistic Programming with Expert</td>
+231:                                        <td className="px-6 py-4 text-right">
+232:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/nlp/defining-neuro-linguistic-programming-in-simple-terms/'>Neuro Linguistic Programming</a>">
+233:                                                &lt;a href="https://instituteofclinicalhypnosis.com/nlp/defining-neuro-linguistic-programming-in-simple-terms/"&gt;Neuro Linguistic Programming&lt;/a&gt;
+234:                                            </code>
+235:                                        </td>
+236:                                    </tr>
+237:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+238:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">SOFT SEA COACHING MODEL</td>
+239:                                        <td className="px-6 py-4 w-1/3">Comprehensive Guide: Master Coaching, Models, and Competencies</td>
+240:                                        <td className="px-6 py-4 text-right">
+241:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/psychotherapy-coaching/what-is-coaching-and-coaching-models/'>SOFT SEA COACHING MODEL</a>">
+242:                                                &lt;a href="https://instituteofclinicalhypnosis.com/psychotherapy-coaching/what-is-coaching-and-coaching-models/"&gt;SOFT SEA COACHING MODEL&lt;/a&gt;
+243:                                            </code>
+244:                                        </td>
+245:                                    </tr>
+246:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+247:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Hypnotherapy</td>
+248:                                        <td className="px-6 py-4 w-1/3">Complete guide to Hypnotherapy</td>
+249:                                        <td className="px-6 py-4 text-right">
+250:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/hypnosis/what-is-hypnotherapy/'>Hypnotherapy</a>">
+251:                                                &lt;a href="https://instituteofclinicalhypnosis.com/hypnosis/what-is-hypnotherapy/"&gt;Hypnotherapy&lt;/a&gt;
+252:                                            </code>
+253:                                        </td>
+254:                                    </tr>
+255:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+256:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Free Masterclass for Psychologists</td>
+257:                                        <td className="px-6 py-4 w-1/3">Free Masterclass on Eclectic Approach to Psychotherapy (Youtube)</td>
+258:                                        <td className="px-6 py-4 text-right">
+259:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://ichars.com/trutalk-4-therapists'>Free Masterclass for Psychologists</a>">
+260:                                                &lt;a href="https://ichars.com/trutalk-4-therapists"&gt;Free Masterclass for Psychologists&lt;/a&gt;
+261:                                            </code>
+262:                                        </td>
+263:                                    </tr>
+264:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+265:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Youtube Masterclass on Happy Living</td>
+266:                                        <td className="px-6 py-4 w-1/3">Masterclass on living a happy and fulfilling life</td>
+267:                                        <td className="px-6 py-4 text-right">
+268:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://www.youtube.com/playlist?list=PLqqlTqGHoAuRS415Nr7rTRNllL5LveylW'>Youtube Masterclass on Happy Living</a>">
+269:                                                &lt;a href="https://www.youtube.com/playlist?list=PLqqlTqGHoAuRS415Nr7rTRNllL5LveylW"&gt;Youtube Masterclass on Happy Living&lt;/a&gt;
+270:                                            </code>
+271:                                        </td>
+272:                                    </tr>
+273:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+274:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Therapeutic Techniques</td>
+275:                                        <td className="px-6 py-4 w-1/3">Youtube Playlist with step by step guides for advance therapy techniques</td>
+276:                                        <td className="px-6 py-4 text-right">
+277:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://ichars.com/yt-qt4t-playlist'>Therapeutic Techniques</a>">
+278:                                                &lt;a href="https://ichars.com/yt-qt4t-playlist"&gt;Therapeutic Techniques&lt;/a&gt;
+279:                                            </code>
+280:                                        </td>
+281:                                    </tr>
+282:                                    <tr className="border-b border-brand-soft-neutral/50 hover:bg-brand-soft-neutral/5 transition-colors">
+283:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Research Papers</td>
+284:                                        <td className="px-6 py-4 w-1/3">Research papers on integrative psychotherapy</td>
+285:                                        <td className="px-6 py-4 text-right">
+286:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/psychotherapy-coaching/research-papers-on-integrated-approaches-to-psychotherapy/'>Research papers on integrative psychotherapy</a>">
+287:                                                &lt;a href="https://instituteofclinicalhypnosis.com/psychotherapy-coaching/research-papers-on-integrated-approaches-to-psychotherapy/"&gt;Research papers on integrative psychotherapy&lt;/a&gt;
+288:                                            </code>
+289:                                        </td>
+290:                                    </tr>
+291:                                    <tr className="hover:bg-brand-soft-neutral/5 transition-colors">
+292:                                        <td className="px-6 py-4 font-medium text-brand-structural-navy w-1/4">Psychotherapy Case Studies</td>
+293:                                        <td className="px-6 py-4 w-1/3">Structured case studies of psychotherapy sessions</td>
+294:                                        <td className="px-6 py-4 text-right">
+295:                                            <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/tag/case-study'>Psychotherapy Case Studies</a>">
+296:                                                &lt;a href="https://instituteofclinicalhypnosis.com/tag/case-study"&gt;Psychotherapy Case Studies&lt;/a&gt;
+297:                                            </code>
+298:                                        </td>
+299:                                    </tr>
+300:                                </tbody>
+301:                            </table>
+302:                        </div>
+303:                    </div>
+304:                </div>
+305:            </Section>
+306:
+307:            {/* COURSES & AFFILIATION ASSETS */}
+308:            <Section theme="white" id="courses" className="pb-24">
+309:                <div className="max-w-5xl mx-auto px-6">
+310:                    <div className="text-center mb-12">
+311:                        <Heading level={2} className="mb-4 text-brand-structural-navy">Courses for Psychologists and Coaches</Heading>
+312:                        <Text size="lg" muted>
+313:                            Use these assets when referring peers or clients to specific professional capabilities. Ideal for affiliates.
+314:                        </Text>
+315:                    </div>
+316:
+317:                    <Grid cols={2} className="gap-6">
+318:                        <FadeIn delay={0.1}>
+319:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 border-brand-soft-neutral">
+320:                                <Heading level={4} className="mb-2 text-lg text-brand-structural-navy">ICHARS Courses</Heading>
+321:                                <Text muted className="mb-4 text-sm flex-grow">Advance skill building courses for Psychologists and Coaches</Text>
+322:                                <div className="mt-4 pt-4 border-t border-brand-soft-neutral/50">
+323:                                    <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Linkable Asset:</Text>
+324:                                    <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/all-courses/'>ICHARS Courses</a>">
+325:                                        &lt;a href="https://instituteofclinicalhypnosis.com/all-courses/"&gt;ICHARS Courses&lt;/a&gt;
+326:                                    </code>
+327:                                </div>
+328:                            </Card>
+329:                        </FadeIn>
+330:                        <FadeIn delay={0.2}>
+331:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 border-brand-soft-neutral">
+332:                                <Heading level={4} className="mb-2 text-lg text-brand-structural-navy">Supervised Fellowship</Heading>
+333:                                <Text muted className="mb-4 text-sm flex-grow">Supervised Mentorship Program for Psychologists</Text>
+334:                                <div className="mt-4 pt-4 border-t border-brand-soft-neutral/50">
+335:                                    <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Linkable Asset:</Text>
+336:                                    <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/about-us/work-with-us/fellowship-opportunities-for-psychologists-and-social-workers/'>Supervised Fellowship</a>">
+337:                                        &lt;a href="https://instituteofclinicalhypnosis.com/about-us/work-with-us/fellowship-opportunities-for-psychologists-and-social-workers/"&gt;Supervised Fellowship&lt;/a&gt;
+338:                                    </code>
+339:                                </div>
+340:                            </Card>
+341:                        </FadeIn>
+342:                        <FadeIn delay={0.3}>
+343:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 border-brand-soft-neutral">
+344:                                <Heading level={4} className="mb-2 text-lg text-brand-structural-navy">Cognitive Hypnotic Coaching® Diploma</Heading>
+345:                                <Text muted className="mb-4 text-sm flex-grow">Advanced Coaching Curriculum for Client Transformation</Text>
+346:                                <div className="mt-4 pt-4 border-t border-brand-soft-neutral/50">
+347:                                    <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Linkable Asset:</Text>
+348:                                    <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/cognitive-hypnotic-coaching-diploma/'>Cognitive Hypnotic Coaching® Diploma</a>">
+349:                                        &lt;a href="https://instituteofclinicalhypnosis.com/cognitive-hypnotic-coaching-diploma/"&gt;Cognitive Hypnotic Coaching® Diploma&lt;/a&gt;
+350:                                    </code>
+351:                                </div>
+352:                            </Card>
+353:                        </FadeIn>
+354:                        <FadeIn delay={0.4}>
+355:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 border-brand-soft-neutral">
+356:                                <Heading level={4} className="mb-2 text-lg text-brand-structural-navy">Cognitive Hypnotic Psychotherapy® Diploma</Heading>
+357:                                <Text muted className="mb-4 text-sm flex-grow">Developing advance therapeutic skills without running from workshop to workshop</Text>
+358:                                <div className="mt-4 pt-4 border-t border-brand-soft-neutral/50">
+359:                                    <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Linkable Asset:</Text>
+360:                                    <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/cognitive-hypnotic-psychotherapy-diploma/'>Cognitive Hypnotic Psychotherapy® Diploma</a>">
+361:                                        &lt;a href="https://instituteofclinicalhypnosis.com/cognitive-hypnotic-psychotherapy-diploma/"&gt;Cognitive Hypnotic Psychotherapy® Diploma&lt;/a&gt;
+362:                                    </code>
+363:                                </div>
+364:                            </Card>
+365:                        </FadeIn>
+366:                        <FadeIn delay={0.5}>
+367:                            <Card className="flex flex-col h-full bg-brand-soft-neutral/10 border-brand-soft-neutral">
+368:                                <Heading level={4} className="mb-2 text-lg text-brand-structural-navy">Become a School Counsellor</Heading>
+369:                                <Text muted className="mb-4 text-sm flex-grow">Effectively support elementary school children in their social, emotional, and academic development</Text>
+370:                                <div className="mt-4 pt-4 border-t border-brand-soft-neutral/50">
+371:                                    <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Linkable Asset:</Text>
+372:                                    <code className="block w-full border border-brand-soft-neutral/50 bg-brand-soft-neutral/10 p-2 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/s-advanced-practitioner/pros-elementary-school-counselling-certification/'>Become a School Counsellor</a>">
+373:                                        &lt;a href="https://instituteofclinicalhypnosis.com/s-advanced-practitioner/pros-elementary-school-counselling-certification/"&gt;Become a School Counsellor&lt;/a&gt;
+374:                                    </code>
+375:                                </div>
+376:                            </Card>
+377:                        </FadeIn>
+378:                    </Grid>
+379:                </div>
+380:            </Section>
+381:
+382:            
+383:            {/* INSTRUCTOR BRANDING KIT (SHOWCASE YOUR AFFILIATION) */}
+384:            <Section theme="white" id="bio-templates" className="border-t border-brand-soft-neutral/30 pb-24 border-b">
+385:                <div className="max-w-7xl mx-auto px-6">
+386:                    <div className="text-center mb-10">
+387:                        <Heading level={2} className="mb-4 text-brand-structural-navy">Client-Centric Bio Templates</Heading>
+388:                        <Text size="lg" muted className="max-w-3xl mx-auto mb-6">
+389:                            A strong bio leads with the value you provide to clients, backed by the authority of your training. We've broken down how to naturally weave your ICHARS credentials into your professional presence.
+390:                        </Text>
+391:                    </div>
+392:
+393:                    <div className="max-w-4xl mx-auto mb-16">
+394:                        <Card className="bg-brand-deep-teal/5 border-brand-deep-teal/20 p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row gap-6 items-center md:items-start text-brand-structural-navy shadow-sm">
+395:                            <div className="bg-white p-3 rounded-full shadow-sm shrink-0">
+396:                                <Check className="text-brand-deep-teal" size={24} />
+397:                            </div>
+398:                            <div>
+399:                                <Heading level={4} className="mb-2 text-brand-structural-navy">The Modular Approach</Heading>
+400:                                <Text size="sm" muted className="mb-4">Instead of a one-size-fits-all paragraph, use these modular snippets to build your bio across different platforms.</Text>
+401:                                <ul className="list-disc pl-5 space-y-2 text-brand-secondary-text text-sm">
+402:                                    <li><strong>The Hook:</strong> For social media bios and LinkedIn headlines.</li>
+403:                                    <li><strong>The Methodology:</strong> For your website's "My Approach" or "How I Work" section.</li>
+404:                                    <li><strong>The Authority:</strong> The specific credential statement to place at the end of your bio or in a dedicated "Qualifications" section.</li>
+405:                                </ul>
+406:                            </div>
+407:                        </Card>
+408:                    </div>
+409:
+410:                    <div className="grid grid-cols-1 gap-12 max-w-5xl mx-auto">
+411:                        {/* 1. SOCIAL BRANDING & HOOKS */}
+412:                        <div>
+413:                            <Heading level={3} className="text-xl mb-6 font-heading text-brand-deep-teal border-b border-brand-soft-neutral/50 pb-4">
+414:                                1. The Hook (Headlines & Elevator Pitches)
+415:                            </Heading>
+416:                            <div className="grid sm:grid-cols-2 gap-6">
+417:                                <BioCard 
+418:                                    title="For Coaches" 
+419:                                    boldText="Cognitive Hypnotic Coaching®"
+420:                                    text="Empowering [professionals/leaders/parents] to overcome [specific challenge] and achieve [desired outcome] using Cognitive Hypnotic Coaching®." 
+421:                                />
+422:                                <BioCard 
+423:                                    title="For Psychotherapists" 
+424:                                    boldText="Cognitive Hypnotic Psychotherapy®"
+425:                                    text="Helping individuals break free from [anxiety/past trauma/limiting patterns] using evidence-based Cognitive Hypnotic Psychotherapy®." 
+426:                                />
+427:                            </div>
+428:                        </div>
+429:
+430:                        {/* 2. EXPLAINING THE METHODOLOGY */}
+431:                        <div>
+432:                            <Heading level={3} className="text-xl mb-6 font-heading text-brand-deep-teal border-b border-brand-soft-neutral/50 pb-4">
+433:                                2. The Methodology (For "My Approach")
+434:                            </Heading>
+435:                            <div className="space-y-6">
+436:                                <BioCard 
+437:                                    title="Explaining Coaching (Jargon-Free)" 
+438:                                    boldText="subconscious patterns"
+439:                                    text="My coaching goes beyond simply setting goals. Using integrative techniques, we will identify and realign the subconscious patterns that hold you back, bridging the gap between where you are and where you want to be." 
+440:                                />
+441:                                <BioCard 
+442:                                    title="Explaining Psychotherapy (Jargon-Free)" 
+443:                                    boldText="root cause"
+444:                                    text="I use an integrative approach that blends subconscious work with conscious cognitive restructuring. This means we don't just talk about symptoms; we actively rewire the root cause to create lasting emotional freedom and behavioral change." 
+445:                                />
+446:                            </div>
+447:                        </div>
+448:
+449:                        {/* 3. THE AUTHORITY STATEMENT */}
+450:                        <div>
+451:                            <Heading level={3} className="text-xl mb-6 font-heading text-brand-deep-teal border-b border-brand-soft-neutral/50 pb-4">
+452:                                3. The Authority Statement (Credentials)
+453:                            </Heading>
+454:                            <div className="space-y-6">
+455:                                <BioCard 
+456:                                    title="Associate Level" 
+457:                                    boldText="Institute of Clinical Hypnosis and Related Sciences (ICHARS)"
+458:                                    text="I am an Associate Level Certified Practitioner, trained by the Institute of Clinical Hypnosis and Related Sciences (ICHARS). I utilize proven, evidence-based frameworks to help my clients achieve measurable personal growth." 
+459:                                />
+460:                                <BioCard 
+461:                                    title="Professional Level" 
+462:                                    boldText="Institute of Clinical Hypnosis and Related Sciences (ICHARS)"
+463:                                    text="I am a Professional Level Certified Practitioner from the Institute of Clinical Hypnosis and Related Sciences (ICHARS), equipped with advanced clinical techniques to resolve deep-seated patterns and facilitate profound transformation." 
+464:                                />
+465:                                <BioCard 
+466:                                    title="Master Level" 
+467:                                    boldText="Institute of Clinical Hypnosis and Related Sciences (ICHARS)"
+468:                                    text="As a Master Level Certified Practitioner trained by the Institute of Clinical Hypnosis and Related Sciences (ICHARS), I specialize in advanced cognitive therapies and hypnotic techniques to address complex psychological challenges with ethical, personalized care." 
+469:                                />
+470:                            </div>
+471:                        </div>
+472:                    </div>
+473:                </div>
+474:            </Section>
+475:{/* CREDENTIALS & BADGES */}
+476:            <Section theme="neutral" id="credentials" className="pb-24 pt-24 border-b">
+477:                <div className="max-w-5xl mx-auto px-6">
+478:                    <div className="text-center mb-12">
+479:                        <Heading level={2} className="mb-4 text-brand-structural-navy">Credentials & Badges</Heading>
+480:                        <Text size="lg" muted>
+481:                            Display your affiliation and completed capability programs on your website or signature.
+482:                        </Text>
+483:                    </div>
+484:
+485:                    <Grid cols={1} className="gap-8">
+486:                        <FadeIn delay={0.1}>
+487:                            <Card className="flex flex-col md:flex-row gap-8 items-center bg-white border-brand-soft-neutral shadow-sm p-8 rounded-2xl">
+488:                                <div className="shrink-0 w-48 h-48 bg-brand-soft-neutral/10 rounded-xl border border-brand-soft-neutral/50 flex items-center justify-center p-4">
+489:                                    <img src="https://instituteofclinicalhypnosis.com/wp-content/uploads/2021/01/Coaching-psychotherapy-diploma-with-ICHARS-Logo.svg" alt="ICHARS Diploma Badge" className="max-w-full max-h-full object-contain" />
+490:                                </div>
+491:                                <div className="flex-grow w-full min-w-0">
+492:                                    <Heading level={4} className="mb-3 font-heading text-xl text-brand-structural-navy">Cognitive Hypnotic Psychotherapy & Coaching Diploma Badge</Heading>
+493:                                    <Text muted className="mb-6">
+494:                                        Use this official digital badge to showcase your completion of the comprehensive certification program. Link this badge back to the course page for verification.
+495:                                    </Text>
+496:                                    <div className="p-4 bg-brand-soft-neutral/10 rounded-lg border border-brand-soft-neutral/50">
+497:                                        <Text size="sm" className="mb-2 font-medium text-brand-structural-navy">Embed Code:</Text>
+498:                                        <code className="block w-full bg-white border border-brand-soft-neutral/50 p-3 rounded text-xs break-all whitespace-normal" title="<a href='https://instituteofclinicalhypnosis.com/'><img src='https://instituteofclinicalhypnosis.com/wp-content/uploads/2021/01/Coaching-psychotherapy-diploma-with-ICHARS-Logo.svg' alt='ICHARS Master Practitioner' width='200' /></a>">
+499:                                            &lt;a href="https://instituteofclinicalhypnosis.com/"&gt;&lt;img src="https://instituteofclinicalhypnosis.com/wp-content/uploads/2021/01/Coaching-psychotherapy-diploma-with-ICHARS-Logo.svg" alt="ICHARS Master Practitioner" /&gt;&lt;/a&gt;
+500:                                        </code>
+501:                                    </div>
+502:                                </div>
+503:                            </Card>
+504:                        </FadeIn>
+505:                    </Grid>
+506:                </div>
+507:            </Section>
+508:
+509:            {/* BRAND & MEDIA ASSETS */}
+510:            <Section theme="white" id="media-assets" className="pb-24 border-t border-brand-soft-neutral/30 pt-24 mt-24">
+511:                <div className="max-w-5xl mx-auto px-6">
+512:                    <div className="text-center mb-12">
+513:                        <Heading level={2} className="mb-4 text-brand-structural-navy">Brand & Media Assets</Heading>
+514:                        <Text size="lg" muted>
+515:                            Official logos and credential assets for your website or press materials. 
+516:                        </Text>
+517:                    </div>
+518:
+519:                    <Grid cols={2} className="gap-8 mb-12">
+520:                        <FadeIn delay={0.1}>
+521:                            <Card className="h-full flex flex-col bg-brand-soft-neutral/10 border-brand-soft-neutral p-8 rounded-2xl">
+522:                                <div className="w-fit bg-white p-4 rounded-xl text-brand-deep-teal mb-6 shadow-sm border border-brand-soft-neutral">
+523:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m8 17 4 4 4-4"/></svg>
+524:                                </div>
+525:                                <Heading level={4} className="mb-3 font-heading text-lg text-brand-structural-navy">Download Logo Package</Heading>
+526:                                <Text muted className="mb-6 flex-grow">
+527:                                    Includes our official logos in square PNG, SVG, as well as horizontal PNG and SVG formats. Use these to showcase your affiliation or for affiliated marketing.
+528:                                </Text>
+529:                                <a href="https://instituteofclinicalhypnosis.com/wp-content/uploads/2024/05/Logo-Formats.zip" download className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-deep-teal px-5 py-3 rounded-lg hover:bg-brand-structural-depth transition-colors w-full justify-center">
+530:                                    Download Logos (.zip)
+531:                                </a>
+532:                            </Card>
+533:                        </FadeIn>
+534:
+535:                        <FadeIn delay={0.2}>
+536:                            <Card className="h-full flex flex-col bg-white border-brand-soft-neutral shadow-sm p-8 rounded-2xl">
+537:                                <div className="w-fit bg-brand-soft-neutral/30 p-4 rounded-xl text-brand-structural-navy mb-6 border border-brand-soft-neutral">
+538:                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+539:                                </div>
+540:                                <Heading level={4} className="mb-3 font-heading text-lg text-brand-structural-navy">Brand & Style Guidelines</Heading>
+541:                                <Text muted className="mb-6 flex-grow">
+542:                                    In order to maintain brand consistency, please follow our style guidelines regarding spacing, minimum sizes, color palettes, and typographic restrictions when displaying our logos.
+543:                                </Text>
+544:                                <a href="#brand-manual" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-structural-navy hover:text-brand-soft-teal transition-colors border border-brand-structural-navy/20 px-5 py-3 rounded-lg w-full justify-center">
+545:                                    View Brand Manual
+546:                                </a>
+547:                            </Card>
+548:                        </FadeIn>
+549:                    </Grid>
+550:
+551:                </div>
+552:            </Section>
+553:
+554:            {/* REFERENCE GUIDE & CLARIFICATION */}
+555:            <Section theme="tint" className="border-t border-brand-soft-neutral/30 pb-24">
+556:                <div className="max-w-4xl mx-auto px-6">
+557:                    <div className="text-center mb-16">
+558:                        <Heading level={2} className="mb-4">Usage Guidelines</Heading>
+559:                        <Text size="lg" muted>
+560:                            Clarifications on how to effectively position and share ICHARS concepts and credentials.
+561:                        </Text>
+562:                    </div>
+563:
+564:                    <div className="space-y-4 mb-16">
+565:                        <FadeIn delay={0.1}>
+566:                            <details className="group bg-white rounded-xl border border-brand-soft-neutral overflow-hidden shadow-sm open:shadow-md transition-all">
+567:                                <summary className="p-6 font-heading text-lg text-brand-structural-navy cursor-pointer list-none flex justify-between items-center bg-white hover:bg-brand-soft-neutral/10">
+568:                                    How do I correctly reference an ICHARS article?
+569:                                    <span className="text-brand-soft-teal group-open:rotate-180 transition-transform">
+570:                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+571:                                    </span>
+572:                                </summary>
+573:                                <div className="p-6 pt-0 text-brand-secondary-text text-sm leading-relaxed border-t border-brand-soft-neutral/20 mt-2">
+574:                                    At the end of any utilized article or concept summary, you must include a direct canonical link back to the original text on the ICHARS website. This preserves the academic trail and contextual integrity of the framework.
+575:                                </div>
+576:                            </details>
+577:                        </FadeIn>
+578:
+579:                        <FadeIn delay={0.2}>
+580:                            <details className="group bg-white rounded-xl border border-brand-soft-neutral overflow-hidden shadow-sm open:shadow-md transition-all">
+581:                                <summary className="p-6 font-heading text-lg text-brand-structural-navy cursor-pointer list-none flex justify-between items-center bg-white hover:bg-brand-soft-neutral/10">
+582:                                    Can I alter the digital badges to match my brand colors?
+583:                                    <span className="text-brand-soft-teal group-open:rotate-180 transition-transform">
+584:                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+585:                                    </span>
+586:                                </summary>
+587:                                <div className="p-6 pt-0 text-brand-secondary-text text-sm leading-relaxed border-t border-brand-soft-neutral/20 mt-2">
+588:                                    No. To maintain universal recognition and trust, the proportions, colors, and structural integrity of all official credentials and logos must remain unaltered. They act as verified trust signals for your clients.
+589:                                </div>
+590:                            </details>
+591:                        </FadeIn>
+592:
+593:                        <FadeIn delay={0.3}>
+594:                            <details className="group bg-white rounded-xl border border-brand-soft-neutral overflow-hidden shadow-sm open:shadow-md transition-all">
+595:                                <summary className="p-6 font-heading text-lg text-brand-structural-navy cursor-pointer list-none flex justify-between items-center bg-white hover:bg-brand-soft-neutral/10">
+596:                                    Are these resources available for anyone to use?
+597:                                    <span className="text-brand-soft-teal group-open:rotate-180 transition-transform">
+598:                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+599:                                    </span>
+600:                                </summary>
+601:                                <div className="p-6 pt-0 text-brand-secondary-text text-sm leading-relaxed border-t border-brand-soft-neutral/20 mt-2">
+602:                                    Articles and press materials are linkable by anyone, including wellness bloggers and general psychologists. However, specific Practitioner Badges and specific Clinical Tools are reserved strictly for registered practitioners who have completed the corresponding ICHARS capability programs.
+603:                                </div>
+604:                            </details>
+605:                        </FadeIn>
+606:                    </div>
+607:                </div>
+608:            </Section>
+609:
+610:            {/* FINAL CTA / DECISION */}
+611:            <Section theme="neutral" className="pb-32">
+612:                 <div className="max-w-4xl mx-auto text-center px-6">
+613:                    <FadeIn>
+614:                        <Heading level={2} className="mb-6 font-accent text-brand-deep-teal">Ready to deepen your practice?</Heading>
+615:                        <Text size="lg" muted className="mb-10 max-w-2xl mx-auto">
+616:                            Transform theoretical knowledge into structured, measurable clinical competency.
+617:                            Join the global community of practitioners setting a new standard for integration.
+618:                        </Text>
+619:                        <div className="flex flex-col sm:flex-row justify-center gap-4">
+620:                            <Button href="#programs" size="lg" variant="primary">Explore Certification Programs</Button>
+621:                            <Button href="#affiliation-program" size="lg" variant="outline">Learn about Affiliation</Button>
+622:                        </div>
+623:                    </FadeIn>
+624:                 </div>
+625:            </Section>
+626:        </div>
+627:    );
+628:};
+629:

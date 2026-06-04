@@ -1,0 +1,193 @@
+import fs from 'fs';
+
+const content = fs.readFileSync('src/pages/Research.tsx', 'utf8');
+const idx = content.indexOf('export const Research = () => {');
+const rawArray = content.substring(0, idx).trim();
+
+const newComponent = `
+
+export const Research = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredPapers = searchTerm.trim() === "" 
+        ? researchPapers 
+        : researchPapers.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    return (
+        <div className="font-body min-h-screen bg-brand-warm-white text-brand-primary-text w-full">
+            
+            {/* 1. HERO SECTION */}
+            <Section className="pt-32 pb-24 md:pt-40 md:pb-32 relative overflow-hidden text-center border-b border-brand-soft-neutral/30">
+                <div className="absolute inset-0 opacity-40 pointer-events-none bg-gradient-to-b from-brand-soft-teal/10 to-transparent" />
+                <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center">
+                    <FadeIn>
+                        <div className="text-[11px] font-bold tracking-widest text-brand-structural-navy uppercase mb-6 flex items-center justify-center gap-2">
+                            <Microscope size={14} className="text-brand-soft-teal" /> Empirical Foundations
+                        </div>
+                        <Heading level={1} className="text-brand-structural-navy mb-6 leading-tight">
+                            Research and Evidence for Integrated Psychotherapy
+                        </Heading>
+                        <Text size="lg" className="text-brand-secondary-text mb-12 max-w-2xl mx-auto font-light">
+                            Explore a curated repository of clinical studies validating the effectiveness of integrating cognitive, behavioral, and somatic frameworks through a comprehensive therapeutic methodology.
+                        </Text>
+                    </FadeIn>
+                    <FadeIn delay={0.1} className="w-full">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Button href="#repository" className="flex items-center justify-center gap-2">
+                                Browse Repository <ArrowRight size={16} />
+                            </Button>
+                        </div>
+                    </FadeIn>
+                </div>
+            </Section>
+
+            {/* 2. THE INTEGRATIVE MECHANISM */}
+            <Section theme="white" className="py-24 border-b border-brand-soft-neutral/30 relative overflow-hidden">
+                <div className="max-w-5xl mx-auto px-6 relative z-10">
+                    <div className="text-center mb-16">
+                        <Heading level={2} className="text-brand-deep-teal mb-6">
+                            The Science of Synthesis
+                        </Heading>
+                        <Text size="lg" className="text-brand-structural-navy max-w-3xl mx-auto">
+                            While distinct theoretical models provide unique insights, genuine breakthroughs occur at their intersections. Empirical evidence suggests that therapeutic models become significantly more durable when integrated systematically.
+                        </Text>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-6 relative z-10">
+                        {[
+                            {
+                                title: "Neural Integration",
+                                desc: "Connecting distinct functional areas to process trauma and regulate emotion efficiently.",
+                                icon: <Brain size={28} className="text-brand-soft-teal" />
+                            },
+                            {
+                                title: "Modal Synthesis",
+                                desc: "Cohesively merging CBT, psychodynamic, and humanistic models into a unified framework.",
+                                icon: <Layers size={28} className="text-brand-soft-teal" />
+                            },
+                            {
+                                title: "Measurable Efficacy",
+                                desc: "Clinical studies demonstrate improved outcomes, faster recovery, and reduced relapse rates.",
+                                icon: <Activity size={28} className="text-brand-soft-teal" />
+                            }
+                        ].map((item, i) => (
+                            <div key={i} className="bg-brand-warm-white p-8 rounded-2xl border border-brand-soft-neutral/50 flex flex-col items-start transition-colors hover:border-brand-soft-teal/50">
+                                <div className="w-12 h-12 rounded-xl bg-white border border-brand-soft-neutral/30 flex items-center justify-center mb-6 shadow-sm">
+                                    {item.icon}
+                                </div>
+                                <Heading level={4} className="text-brand-structural-navy mb-3">
+                                    {item.title}
+                                </Heading>
+                                <Text size="sm" className="text-brand-secondary-text m-0">
+                                    {item.desc}
+                                </Text>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </Section>
+
+            {/* 3. EMPIRICAL REPOSITORY */}
+            <Section id="repository" className="py-24 bg-brand-warm-white">
+                <div className="max-w-4xl mx-auto px-6">
+                    <FadeIn>
+                        <div className="text-center mb-12">
+                            <Heading level={2} className="mb-4 text-brand-structural-navy">
+                                Our Empirical Repository
+                            </Heading>
+                            <Text className="text-brand-secondary-text mb-8 max-w-2xl mx-auto">
+                                Search our robust directory of clinical research papers and studies validating the integrative approach.
+                            </Text>
+
+                            <div className="relative max-w-2xl mx-auto shadow-sm">
+                                <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+                                    <Search className="text-brand-soft-teal" size={20} />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Search by title, keyword, or condition..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-14 pr-6 py-4 rounded-xl border border-brand-soft-neutral focus:border-brand-soft-teal focus:ring-1 focus:ring-brand-soft-teal transition-all bg-white text-brand-structural-navy font-medium placeholder:text-brand-secondary-text/50 outline-none"
+                                />
+                            </div>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={0.1}>
+                        <div className="flex flex-col gap-4">
+                            <div className="mb-4 flex items-center justify-between border-b border-brand-soft-neutral/30 pb-4">
+                                <Text className="font-semibold text-brand-structural-navy text-sm uppercase tracking-wider">
+                                    {filteredPapers.length} Result{filteredPapers.length !== 1 && 's'} Found
+                                    {searchTerm && <span className="text-brand-soft-teal ml-2 lowercase font-normal italic">for "{searchTerm}"</span>}
+                                </Text>
+                            </div>
+
+                            {filteredPapers.length === 0 ? (
+                                <div className="text-center py-16 bg-white rounded-2xl border border-brand-soft-neutral/50 border-dashed">
+                                    <Search className="mx-auto text-brand-soft-neutral/50 mb-4" size={40} />
+                                    <Heading level={4} className="mb-2 text-brand-structural-navy">No studies found</Heading>
+                                    <Text className="text-brand-secondary-text">We couldn't find any papers matching your search query. Try adjusting your keywords.</Text>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {filteredPapers.map((paper, index) => (
+                                        <a
+                                            key={index}
+                                            href={paper.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-white rounded-2xl border border-brand-soft-neutral/50 transition-all duration-300 hover:border-brand-soft-teal hover:shadow-md"
+                                        >
+                                            <div className="flex gap-4 pr-6 items-start">
+                                                <div className="shrink-0 mt-0.5">
+                                                    <FileText className="text-brand-soft-neutral/50 group-hover:text-brand-soft-teal transition-colors" size={24} />
+                                                </div>
+                                                <div>
+                                                    <Heading level={4} className="text-base text-brand-structural-navy transition-colors font-medium mb-1 leading-snug group-hover:text-brand-deep-teal">
+                                                        {paper.title}
+                                                    </Heading>
+                                                    <div className="text-xs text-brand-secondary-text font-medium uppercase tracking-wider">
+                                                        {paper.category || "Clinical Research"}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-4 sm:mt-0 shrink-0 self-start sm:self-center">
+                                                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-brand-warm-white text-brand-secondary-text group-hover:bg-brand-soft-teal/10 group-hover:text-brand-deep-teal transition-colors border border-brand-soft-neutral/30 group-hover:border-transparent">
+                                                    <ArrowRight size={18} />
+                                                </div>
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </FadeIn>
+                </div>
+            </Section>
+
+            {/* 4. CTA */}
+            <Section theme="dark" className="py-24 border-t border-brand-soft-neutral/30 bg-brand-structural-navy text-center">
+                <div className="max-w-3xl mx-auto px-6">
+                    <Heading level={2} className="mb-6 text-white leading-tight">
+                        Ready to integrate these principles?
+                    </Heading>
+                    <Text size="lg" className="mb-10 text-white/80 max-w-2xl mx-auto font-light">
+                        Translate decades of clinical research into practical, transformative skills for your practice with our comprehensive integration programs.
+                    </Text>
+                    <div className="flex flex-col sm:flex-row justify-center gap-4">
+                        <Button href="#chp" className="bg-[#E85D04] text-white hover:bg-[#c74e02] border-transparent font-medium">
+                            Explore Psychotherapy Program
+                        </Button>
+                        <Button href="#chc" variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:border-white font-medium">
+                            Explore Coaching Program
+                        </Button>
+                    </div>
+                </div>
+            </Section>
+
+        </div>
+    );
+};
+`
+fs.writeFileSync('src/pages/Research.tsx', rawArray + newComponent, 'utf8');
